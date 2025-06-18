@@ -1,21 +1,23 @@
+import { Handlers, PageProps } from "$fresh/server.ts";
+import axios from "axios"
+import Show_Characters from "../islands/Show_Characters.tsx";
 
-export default function Home() {
+
+export const handler: Handlers = {
+  async GET(_req, ctx) {
+
+    const characters = await axios.get("https://hp-api.onrender.com/api/characters")
+    const charData = characters.data
+
+    return ctx.render(charData)
+
+  },
+}
+
+export default function Home(props:PageProps) {
   return (
-    <div class="px-4 py-8 mx-auto bg-[#86efac]">
-      <div class="max-w-screen-md mx-auto flex flex-col items-center justify-center">
-        <img
-          class="my-6"
-          src="/logo.svg"
-          width="128"
-          height="128"
-          alt="the Fresh logo: a sliced lemon dripping with juice"
-        />
-        <h1 class="text-4xl font-bold">Welcome to Fresh</h1>
-        <p class="my-4">
-          Try updating this message in the
-          <code class="mx-2">./routes/index.tsx</code> file, and refresh.
-        </p>
+      <div>
+        <Show_Characters character={props.data}/>
       </div>
-    </div>
   );
 }
